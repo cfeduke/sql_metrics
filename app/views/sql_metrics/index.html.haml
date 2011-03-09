@@ -1,0 +1,23 @@
+!!!
+%h1 Listing SQL Metrics
+
+%table{:cellspacing=>"10"}
+	%tr
+		%th Name
+		%th Duration
+		%th Started At
+		%th Payload
+		%th
+	- @metrics.each do |metric|
+		%tr
+			%td=metric.name
+			%td #{metric.duration}us
+			%td #{time_ago_in_words metric.started_at} ago
+			%td
+				- metric.payload.each do |k,v|
+					%p
+						%b= k.humanize
+						%br/
+						= v
+			%td= link_to 'Destroy', sql_metric_path(metric), :confirm => 'Are you sure?', :method => :delete
+		
