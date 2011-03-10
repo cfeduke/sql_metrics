@@ -17,4 +17,20 @@ class NavigationTest < ActiveSupport::IntegrationCase
       click_link "Destroy"
     end
   end
+  
+  test "can ignore notifications for a given path" do
+    assert_difference "SqlMetrics::Metric.count" do
+      visit "/users"
+    end
+    
+    begin
+      SqlMetrics.mute_regexp = %r{^/users}
+      
+      assert_no_difference "SqlMetrics::Metric.count" do
+        visit "/users"
+      end
+    ensure
+      SqlMetrics.mute_regexp = nil
+    end
+  end
 end
