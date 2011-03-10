@@ -7,6 +7,8 @@ class NavigationTest < ActiveSupport::IntegrationCase
     fill_in "Age", :with => "23"
     click_button "Create User"
     
+    SqlMetrics.finish!
+    
     visit sql_metrics_path
     assert_match(/User Load/, page.body)
     assert_match(/INSERT INTO/, page.body)

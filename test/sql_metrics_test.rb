@@ -8,6 +8,8 @@ class SqlMetricsTest < ActiveSupport::TestCase
       sleep(0.001)
     end
     
+    SqlMetrics.finish!
+    
     metric = SqlMetrics::Metric.first
     assert_equal(1, SqlMetrics::Metric.count)
     assert_equal("sql.any_orm", metric.name)
