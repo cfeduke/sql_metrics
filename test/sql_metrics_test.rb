@@ -18,4 +18,16 @@ class SqlMetricsTest < ActiveSupport::TestCase
     assert metric.started_at
     assert metric.created_at
   end
+  
+  test "can ignore notifications when specified" do
+    SqlMetrics.mute! do
+      assert SqlMetrics.mute?
+      ActiveSupport::Notifications.instrument "sql.any_orm" do
+        sleep(0.001)
+      end
+    end
+    
+    assert !SqlMetrics.mute?
+    assert_equal 0, SqlMetrics::Metric.count
+  end
 end
